@@ -1,13 +1,16 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { normalHtmlTemplate } from "@/template/normal-template";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import "@melloware/coloris/dist/coloris.css";
-import * as Color from "@melloware/coloris";
+
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { Input } from "@/components/ui/input"; // Adjust the path
+import { normalHtmlTemplate } from "@/template/normal-template";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
+// Dynamically import Coloris to prevent SSR issues
+// Removed dynamic import
 
 type FormData = {
   bg: string;
@@ -21,7 +24,9 @@ export default function Home() {
   const { register, handleSubmit, setValue } = useForm<FormData>();
 
   useEffect(() => {
-    Color.init();
+    import("@melloware/coloris").then((Coloris) => {
+      Coloris.init();
+    });
   }, []);
 
   const onSubmit = async (values: FormData) => {

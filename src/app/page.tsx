@@ -9,7 +9,6 @@ import { normalHtmlTemplate } from "@/template/normal-template";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -36,7 +35,7 @@ type FormData = {
 
 export default function Home() {
   const { register, handleSubmit, setValue } = useForm<FormData>();
-  const [template, setTemplate] = useState("");
+  const [template, setTemplate] = useState("first");
   useEffect(() => {
     import("@melloware/coloris").then((Coloris) => {
       Coloris.init();
@@ -111,7 +110,7 @@ export default function Home() {
                   <h3>Template Type</h3>
                   <Select
                     onValueChange={(value) => handleTemplateChange(value)}
-                    defaultValue="content"
+                    defaultValue={template}
                   >
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder="Type of Content" />

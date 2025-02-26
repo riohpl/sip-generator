@@ -46,7 +46,7 @@ export const normalHtmlTemplate = (params: htmlParamTypes) => {
       }
       .btn-cta {
         content: url("${params.cta}");
-        width: 50%;
+        width: 40%;
       }
       .pulse-button {
         cursor: pointer;
@@ -81,6 +81,9 @@ export const normalHtmlTemplate = (params: htmlParamTypes) => {
         }
       }
       @media (orientation: landscape) {
+        .btn-cta {
+        width: 55%;
+        }
         body {
           height: unset;
         }
@@ -111,6 +114,47 @@ export const normalHtmlTemplate = (params: htmlParamTypes) => {
           display: flex;
           justify-content: center;
           align-items: center;
+        }
+      }
+            @media (min-width: 667px) and (max-width: 844px) and (orientation: landscape) {
+        .content_landscape {
+          width: 75%;
+        }
+        .btn-cta-container{
+          margin-right: 30%;
+        }
+      }
+      
+      @media (min-width: 740) and (max-width: 844px) and (orientation: landscape) {
+        .content_landscape {
+          width: 75%;
+        }
+        .btn-cta-container{
+          margin-right: 28%;
+        }
+      }
+
+      @media (min-width: 844px) and (max-width: 896px) and (orientation: landscape) {
+        .content_landscape {
+          width: 65%;
+        }
+        .btn-cta-container{
+          margin-right: 40%;
+        }
+      }
+
+      @media (min-width: 896px) and (max-width: 932px) and (orientation: landscape) {
+        .content_landscape {
+          width: 62%;
+        }
+        .btn-cta-container{
+          margin-right: 43%;
+        }
+      }
+
+      @media (min-width: 932px) and (max-width: 932px) and (orientation: landscape) {
+        .content_landscape {
+          width: 60%;
         }
       }
     </style>

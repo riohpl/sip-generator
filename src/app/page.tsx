@@ -2,15 +2,28 @@
 
 import "@melloware/coloris/dist/coloris.css";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input"; // Adjust the path
 import { normalHtmlTemplate } from "@/template/normal-template";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+} from "@/components/ui/select";
 
-// Dynamically import Coloris to prevent SSR issues
-// Removed dynamic import
 
 type FormData = {
   bg: string;
@@ -18,17 +31,22 @@ type FormData = {
   portrait: File | null;
   cta: File | null;
   fileName: string;
+  template: string;
 };
 
 export default function Home() {
   const { register, handleSubmit, setValue } = useForm<FormData>();
-
+  const [template, setTemplate] = useState("");
   useEffect(() => {
     import("@melloware/coloris").then((Coloris) => {
       Coloris.init();
     });
   }, []);
 
+  const handleTemplateChange = (value: string) => {
+    setValue("template", value);
+    setTemplate(value);
+  };
   const onSubmit = async (values: FormData) => {
     console.log(values);
     try {
@@ -89,6 +107,24 @@ export default function Home() {
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="flex flex-col gap-4">
+                <div className="flex flex-col">
+                  <h3>Template Type</h3>
+                  <Select
+                    onValueChange={(value) => handleTemplateChange(value)}
+                    defaultValue="content"
+                  >
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Type of Content" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Type of Content</SelectLabel>
+                        <SelectItem value="first">First Template</SelectItem>
+                        <SelectItem value="second">Second Template</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
                 <div className="flex flex-col">
                   <h3>File Name</h3>
                   <Input type="text" {...register("fileName")} required />

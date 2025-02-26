@@ -18,6 +18,7 @@ import {
   SelectLabel,
 } from "@/components/ui/select";
 import Image from "next/image";
+import ImageHolder from "@/components/ImageHolder";
 
 type FormData = {
   bg: string;
@@ -28,9 +29,26 @@ type FormData = {
   template: string;
 };
 
+const fileToBase64 = (file: File | null): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    if (!file) {
+      resolve("");
+      return;
+    }
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+};
+
 export default function Home() {
   const { register, handleSubmit, setValue } = useForm<FormData>();
   const [template, setTemplate] = useState("first");
+  const [landscapeImage, setLandscapeImage] = useState("");
+  const [portraitImage, setPortraitImage] = useState("");
+  const [ctaImage, setCtaImage] = useState("");
+
   useEffect(() => {
     import("@melloware/coloris").then((Coloris) => {
       Coloris.init();
@@ -41,36 +59,45 @@ export default function Home() {
     setValue("template", value);
     setTemplate(value);
   };
+
+  const handleLandscapeChange = async (file: any) => {
+    setValue("landscape", file || null);
+    const image = await fileToBase64(file);
+    setLandscapeImage(image);
+  };
+
+  const handleCTAChange = async (file: any) => {
+    setValue("cta", file);
+    const image = await fileToBase64(file);
+    setCtaImage(image);
+  };
+  const handlePortraitChange = async (file: any) => {
+    setValue("portrait", file || null);
+    const image = await fileToBase64(file);
+    setPortraitImage(image);
+  };
+
+  const pickColor = async () => {
+    if (!(window as any).EyeDropper) {
+      alert("EyeDropper API is not supported in this browser.");
+      return;
+    }
+    const eyeDropper = new (window as any).EyeDropper();
+    try {
+      const result = await eyeDropper.open();
+      console.log(result);
+      setValue("bg", result.sRGBHex);
+    } catch (error) {
+      console.error("EyeDropper canceled", error);
+    }
+  };
+
   const onSubmit = async (values: FormData) => {
     console.log(values);
     try {
-      const fileToBase64 = (file: File | null): Promise<string> => {
-        return new Promise((resolve, reject) => {
-          if (!file) {
-            resolve("");
-            return;
-          }
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = () => resolve(reader.result as string);
-          reader.onerror = (error) => reject(error);
-        });
-      };
-
       const landscapeBase64 = await fileToBase64(values.landscape);
       const portraitBase64 = await fileToBase64(values.portrait);
       const ctaBase64 = await fileToBase64(values.cta);
-
-      console.log(
-        {
-          bg: values.bg || "#fff",
-          landscape: landscapeBase64,
-          portrait: portraitBase64,
-          cta: ctaBase64,
-          title: values.fileName,
-        },
-        "SHEEESSHHh"
-      );
       const params = {
         bg: values.bg,
         landscape: landscapeBase64,
@@ -121,52 +148,43 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col">
                   <h3>File Name</h3>
-                  <Input type="text" {...register("fileName")} required />
-                </div>
-                <div className="flex flex-col">
-                  <h3>BG COLOR</h3>
                   <Input
                     type="text"
-                    {...register("bg")}
-                    placeholder="input hex value sample #fff"
-                    data-coloris
-                    onChange={(e) => setValue("bg", e.target.value)}
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <h3>Landscape</h3>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) =>
-                      setValue("landscape", e.target.files?.[0] || null)
-                    }
+                    {...register("fileName")}
                     required
+                    placeholder="Input your Filename"
                   />
                 </div>
+                <ImageHolder
+                  changeHandler={handleLandscapeChange}
+                  image={landscapeImage}
+                  title="Landscape Image"
+                />
+                <ImageHolder
+                  changeHandler={handlePortraitChange}
+                  image={portraitImage}
+                  title="Portrait Image"
+                />
                 <div className="flex flex-col">
-                  <h3>Portrait</h3>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) =>
-                      setValue("portrait", e.target.files?.[0] || null)
-                    }
-                    required
-                  />
+                  <h3>BG COLOR</h3>
+                  <div className="flex gap-2">
+                    <Input
+                      type="text"
+                      {...register("bg")}
+                      placeholder="input hex value sample #fff"
+                      onChange={(e) => setValue("bg", e.target.value)}
+                    />
+                    <Button onClick={pickColor} type="button">
+                      PICK COLOR
+                    </Button>
+                  </div>
                 </div>
-                <div className="flex flex-col">
-                  <h3>CTA</h3>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) =>
-                      setValue("cta", e.target.files?.[0] || null)
-                    }
-                    required
-                  />
-                </div>
-                <Button>Generate</Button>
+                <ImageHolder
+                  changeHandler={handleCTAChange}
+                  image={ctaImage}
+                  title="CTA Image"
+                />
+                <Button type="submit">Generate</Button>
               </div>
             </form>
           </CardContent>
@@ -179,18 +197,18 @@ export default function Home() {
             <div className="img-cont">
               <h3 className="text-center font-bold text-lg">Landscape</h3>
               <Image
-                src={"/template/first-template/landscape.png"}
+                src={`/template/${template}-template/landscape.png`}
                 alt="landscape"
-                width={500}
+                width={400}
                 height={500}
               />
             </div>
             <div className="img-cont">
               <h3 className="text-center font-bold text-lg">Portrait</h3>
               <Image
-                src={"/template/first-template/portrait.png"}
+                src={`/template/${template}-template/portrait.png`}
                 alt="landscape"
-                width={500}
+                width={400}
                 height={500}
               />
             </div>

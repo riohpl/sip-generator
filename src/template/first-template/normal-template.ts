@@ -113,7 +113,7 @@ export const normalHtmlTemplate = (params: htmlParamTypes) => {
           align-items: center;
         }
       }
-            @media (min-width: 667px) and (max-width: 844px) and (orientation: landscape) {
+      @media (min-width: 667px) and (max-width: 844px) and (orientation: landscape) {
         .content_landscape {
           width: 75%;
         }

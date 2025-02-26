@@ -1,4 +1,7 @@
-<!DOCTYPE html>
+import { htmlParamTypes } from "../types";
+
+export const normalHtmlTemplate = (params: htmlParamTypes) => {
+  return `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -22,9 +25,10 @@
         align-items: center;
         margin: 0;
         height: 100vh;
+        background: ${params.bg}
       }
       .content {
-        content: url("./nectar_colanot_sip_2025011222_portrait.png");
+        content: url("${params.portrait}");
         position: relative;
         width: 100%;
       }
@@ -41,8 +45,8 @@
         align-items: center;
       }
       .btn-cta {
-        content: url("CTA_button.png");
-        width: 50%;
+        content: url("${params.cta}");
+        width: 40%;
       }
       .pulse-button {
         cursor: pointer;
@@ -77,8 +81,8 @@
         }
       }
       @media (orientation: landscape) {
-        body {
-          height: unset;
+        .btn-cta {
+        width: 55%;
         }
         .main {
           display: none;
@@ -94,7 +98,7 @@
           position: relative;
         }
         .content_landscape {
-          content: url("./nectar_colanot_sip_2025011222_landscape.png");
+          content: url("${params.landscape}");
           position: relative;
           width: 100%;
         }
@@ -107,6 +111,47 @@
           display: flex;
           justify-content: center;
           align-items: center;
+        }
+      }
+            @media (min-width: 667px) and (max-width: 844px) and (orientation: landscape) {
+        .content_landscape {
+          width: 75%;
+        }
+        .btn-cta-container{
+          margin-right: 30%;
+        }
+      }
+      
+      @media (min-width: 740) and (max-width: 844px) and (orientation: landscape) {
+        .content_landscape {
+          width: 75%;
+        }
+        .btn-cta-container{
+          margin-right: 28%;
+        }
+      }
+      
+      @media (min-width: 844px) and (max-width: 896px) and (orientation: landscape) {
+        .content_landscape {
+          width: 65%;
+        }
+        .btn-cta-container{
+          margin-right: 40%;
+        }
+      }
+
+      @media (min-width: 896px) and (max-width: 932px) and (orientation: landscape) {
+        .content_landscape {
+          width: 62%;
+        }
+        .btn-cta-container{
+          margin-right: 43%;
+        }
+      }
+
+      @media (min-width: 932px) and (max-width: 932px) and (orientation: landscape) {
+        .content_landscape {
+          width: 60%;
         }
       }
     </style>
@@ -128,4 +173,5 @@
       </div>
     </div>
   </body>
-</html>
+</html>`;
+};

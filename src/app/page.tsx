@@ -5,13 +5,8 @@ import "@melloware/coloris/dist/coloris.css";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input"; // Adjust the path
-import { normalHtmlTemplate } from "@/template/normal-template";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { normalHtmlTemplate } from "@/template/first-template/normal-template";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -22,7 +17,7 @@ import {
   SelectItem,
   SelectLabel,
 } from "@/components/ui/select";
-
+import Image from "next/image";
 
 type FormData = {
   bg: string;
@@ -98,7 +93,7 @@ export default function Home() {
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+      <main className="flex gap-8 row-start-2 items-center sm:items-start">
         <Card>
           <CardHeader>
             <CardTitle>SIP GENERATOR</CardTitle>
@@ -174,6 +169,31 @@ export default function Home() {
                 <Button>Generate</Button>
               </div>
             </form>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>SIP Layout Preview Sample</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-4">
+            <div className="img-cont">
+              <h3 className="text-center font-bold text-lg">Landscape</h3>
+              <Image
+                src={"/template/first-template/landscape.png"}
+                alt="landscape"
+                width={500}
+                height={500}
+              />
+            </div>
+            <div className="img-cont">
+              <h3 className="text-center font-bold text-lg">Portrait</h3>
+              <Image
+                src={"/template/first-template/portrait.png"}
+                alt="landscape"
+                width={500}
+                height={500}
+              />
+            </div>
           </CardContent>
         </Card>
       </main>
